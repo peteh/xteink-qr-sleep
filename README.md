@@ -1,13 +1,13 @@
 # QR Sleep Screen Generator — Xteink X4
 
-A self-hosted single-page tool that generates a vCard QR code as a 480×800 PNG
+A self-hosted single-page tool that generates a vCard QR code as a 480×800 24-bit BMP
 optimised for the Xteink X4 with CrossInk firmware in **Page Overlay** mode.
 
 ## How it works
 
 CrossInk's Page Overlay sleep screen mode renders white pixels as transparent,
 compositing the image on top of the last book page. This tool outputs a mostly-white
-PNG with just the QR box (dark border + white interior + dark text) in the lower third
+BMP with just the QR box (dark border + white interior + dark text) in the lower third
 of the screen. Result: the book text stays readable and the QR floats on top.
 
 ## Files
@@ -46,8 +46,8 @@ Works fine behind Nginx Proxy Manager too — just point a proxy host or subpath
 
 1. Fill in contact details
 2. Adjust size, margin, corner radius to taste
-3. Click **Download PNG (480×800)**
-4. Copy the PNG into `.sleep/` on the X4's SD card
+3. Click **Download BMP 24-bit (480×800)**
+4. Copy the BMP into `.sleep/` on the X4's SD card
 5. CrossInk: Settings → Display → Sleep Screen → **Page overlay**
 
 ## vCard format

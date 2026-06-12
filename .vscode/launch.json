@@ -9,7 +9,7 @@
             "type": "editor-browser",
             "request": "launch",
             "name": "Open index.html",
-            "url": "file:///home/pete/Programming/xteink-sleep/index.html"
+            "url": "file://${workspaceFolder}/index.html"
         }
     ]
 }

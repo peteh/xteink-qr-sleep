@@ -180,23 +180,153 @@ async function render() {
   ctx.fillText(label, W / 2, textY + nameH + (subText ? subH + 8 : 4));
 }
 
-/* ── Download PNG ─────────────────────────────────────── */
+/* ── Canvas to 24-bit BMP conversion ────────────────────── */
 
-async function downloadPNG() {
+function canvasToBMP24(canvas) {
+  const ctx = canvas.getContext('2d');
+  const width = canvas.width;
+  const height = canvas.height;
+  
+  // Get image data in RGBA format
+  const imageData = ctx.getImageData(0, 0, width, height);
+  const data = imageData.data;
+  
+  // Calculate stride (must be multiple of 4)
+  const stride = Math.ceil((width * 3) / 4) * 4;
+  const pixelDataSize = stride * height;
+  
+  // BMP file header (14 bytes) + DIB header (40 bytes)
+  const headerSize = 54;
+  const fileSize = headerSize + pixelDataSize;
+  
+  // Create buffer for entire BMP file
+  const buffer = new ArrayBuffer(fileSize);
+  const view = new Uint8Array(buffer);
+  
+  // ── File Header (14 bytes) ──
+  view[0] = 0x42;  // 'B'
+  view[1] = 0x4D;  // 'M'
+  // File size (little-endian)
+  view[2] = fileSize & 0xFF;
+  view[3] = (fileSize >> 8) & 0xFF;
+  view[4] = (fileSize >> 16) & 0xFF;
+  view[5] = (fileSize >> 24) & 0xFF;
+  // Reserved (4 bytes, always 0)
+  view[6] = 0;
+  view[7] = 0;
+  view[8] = 0;
+  view[9] = 0;
+  // Offset to pixel data (14 + 40 = 54, little-endian)
+  view[10] = 54;
+  view[11] = 0;
+  view[12] = 0;
+  view[13] = 0;
+  
+  // ── DIB Header (BITMAPINFOHEADER, 40 bytes) ──
+  let offset = 14;
+  
+  // Header size (40 bytes)
+  view[offset++] = 40;
+  view[offset++] = 0;
+  view[offset++] = 0;
+  view[offset++] = 0;
+  
+  // Width (little-endian)
+  view[offset++] = width & 0xFF;
+  view[offset++] = (width >> 8) & 0xFF;
+  view[offset++] = (width >> 16) & 0xFF;
+  view[offset++] = (width >> 24) & 0xFF;
+  
+  // Height (little-endian, positive = bottom-up)
+  view[offset++] = height & 0xFF;
+  view[offset++] = (height >> 8) & 0xFF;
+  view[offset++] = (height >> 16) & 0xFF;
+  view[offset++] = (height >> 24) & 0xFF;
+  
+  // Planes (1)
+  view[offset++] = 1;
+  view[offset++] = 0;
+  
+  // Bits per pixel (24 = 0x18)
+  view[offset++] = 24;
+  view[offset++] = 0;
+  
+  // Compression (0 = uncompressed)
+  view[offset++] = 0;
+  view[offset++] = 0;
+  view[offset++] = 0;
+  view[offset++] = 0;
+  
+  // Image size (can be 0 for uncompressed)
+  view[offset++] = 0;
+  view[offset++] = 0;
+  view[offset++] = 0;
+  view[offset++] = 0;
+  
+  // X pixels per meter (0)
+  view[offset++] = 0;
+  view[offset++] = 0;
+  view[offset++] = 0;
+  view[offset++] = 0;
+  
+  // Y pixels per meter (0)
+  view[offset++] = 0;
+  view[offset++] = 0;
+  view[offset++] = 0;
+  view[offset++] = 0;
+  
+  // Colors used (0 = default)
+  view[offset++] = 0;
+  view[offset++] = 0;
+  view[offset++] = 0;
+  view[offset++] = 0;
+  
+  // Important colors (0 = all)
+  view[offset++] = 0;
+  view[offset++] = 0;
+  view[offset++] = 0;
+  view[offset++] = 0;
+  
+  // ── Pixel Data ──
+  // BMP stores pixels bottom-up, so we iterate from last row to first
+  offset = headerSize;
+  for (let y = height - 1; y >= 0; y--) {
+    for (let x = 0; x < width; x++) {
+      const pixelIndex = (y * width + x) * 4;
+      // BMP uses BGR format, not RGB
+      view[offset++] = data[pixelIndex + 2];      // Blue
+      view[offset++] = data[pixelIndex + 1];      // Green
+      view[offset++] = data[pixelIndex];          // Red
+      // Alpha channel is ignored in 24-bit BMP
+    }
+    // Pad row to 4-byte boundary
+    const rowPadding = stride - (width * 3);
+    for (let p = 0; p < rowPadding; p++) {
+      view[offset++] = 0;
+    }
+  }
+  
+  return buffer;
+}
+
+/* ── Download BMP ──────────────────────────────────────── */
+
+async function downloadBMP() {
   await render();
   await new Promise(r => setTimeout(r, 100)); // ensure render is flushed
 
   const canvas = get('out-canvas');
-  canvas.toBlob(blob => {
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    const safeName = (get('f-name').value.trim() || 'contact')
-      .toLowerCase().replace(/\s+/g, '_').replace(/[^a-z0-9_]/g, '');
-    a.download = `${safeName}_sleep.png`;
-    a.href = url;
-    a.click();
-    URL.revokeObjectURL(url);
-  }, 'image/png');
+  const bmpBuffer = canvasToBMP24(canvas);
+  
+  const blob = new Blob([bmpBuffer], { type: 'image/bmp' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const safeName = (get('f-name').value.trim() || 'contact')
+    .toLowerCase().replace(/\s+/g, '_').replace(/[^a-z0-9_]/g, '');
+  a.download = `${safeName}_sleep.bmp`;
+  a.href = url;
+  a.click();
+  URL.revokeObjectURL(url);
 }
 
 /* ── Slider live labels ───────────────────────────────── */
@@ -230,7 +360,7 @@ function debouncedRender() {
 
 /* ── Button wiring ────────────────────────────────────── */
 
-get('btn-download').addEventListener('click', downloadPNG);
+get('btn-download').addEventListener('click', downloadBMP);
 get('btn-preview').addEventListener('click', render);
 
 /* ── Initial render ───────────────────────────────────── */
