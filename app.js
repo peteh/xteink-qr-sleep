@@ -192,21 +192,7 @@ async function downloadPNG() {
   await new Promise(r => setTimeout(r, 100)); // ensure render is flushed
 
   const canvas = get('out-canvas');
-  
-  // Create a new canvas with white background for export
-  const exportCanvas = document.createElement('canvas');
-  exportCanvas.width = W;
-  exportCanvas.height = H;
-  const exportCtx = exportCanvas.getContext('2d');
-  
-  // Fill with white for CrossInk overlay mode
-  exportCtx.fillStyle = '#ffffff';
-  exportCtx.fillRect(0, 0, W, H);
-  
-  // Draw the preview content on top
-  exportCtx.drawImage(canvas, 0, 0);
-  
-  exportCanvas.toBlob(blob => {
+  canvas.toBlob(blob => {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     const safeName = (get('f-name').value.trim() || 'contact')
