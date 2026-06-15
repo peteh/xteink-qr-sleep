@@ -3,13 +3,15 @@
 A self-hosted single-page tool that generates a vCard QR code as a PNG
 optimised for the Xteink X3 and X4 with Crosspoint or CrossInk firmware in **Page Overlay** mode.
 
-If your reader gets lost, the finder has an easy way to get in touch with you. 
+If your reader gets lost, the finder has an easy way to get in touch with you.
+
+![Sample Image](doc/image.png)
 
 ## How it works
 
 Crosspoints/CrossInk's Page Overlay sleep screen mode renders transparent PNGs compositing the image on top of the last book page.
 
-This tool outputs a PNG with a QR box (dark border + white interior + dark text) containing your contact details in the lower third of the screen. This results in the book text staying readable and the QR floats on top.
+This tool outputs a PNG with a QR box containing your contact details in the lower third of the screen. This results in the book text staying readable and the QR floats on top when the device goes to sleep.
 
 ## Usage
 
@@ -17,7 +19,7 @@ This tool outputs a PNG with a QR box (dark border + white interior + dark text)
 2. Fill in contact details
 3. Adjust size, margin, corner radius to taste
 4. Click **Download PNG**
-5. Copy the PNG into `.sleep/` on the X4's SD card
+5. Copy the PNG into `/sleep/` on the devices's SD card (create the folder if it does not exist)
 6. On the device: Settings → Display → Sleep Screen → **Page overlay**
 
 ## vCard format
@@ -45,6 +47,9 @@ Get the Device
 Drop all three files into any static hosting directory and serve them.
 
 **Nginx example:**
+
+This works fine behind Nginx Proxy Manager as well. Point a proxy host or subpath at it.
+
 ```nginx
 location /qr-sleep/ {
     root /var/www;
@@ -59,5 +64,3 @@ handle /qr-sleep/* {
     file_server
 }
 ```
-
-Works fine behind Nginx Proxy Manager too — just point a proxy host or subpath at it.

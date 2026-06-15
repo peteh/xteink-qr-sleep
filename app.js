@@ -149,17 +149,29 @@ async function render() {
   const boxX = Math.round((W - boxW) / 2);
   const boxY = H - bottomMargin - boxH;
 
+  // ── Drop shadow for the box
+  ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
+  ctx.shadowBlur = 12;
+  ctx.shadowOffsetX = 4;
+  ctx.shadowOffsetY = 4;
+
   // ── White box with rounded border (border is dark, interior white)
-  //    Interior stays white → transparent in CrossInk overlay mode
-  //    Border stays dark → visible on page
   ctx.fillStyle = '#ffffff';
   roundedRect(ctx, boxX, boxY, boxW, boxH, cornerRadius);
   ctx.fill();
 
+    // ── Reset shadow
+  ctx.shadowColor = 'transparent';
+  ctx.shadowBlur = 0;
+  ctx.shadowOffsetX = 0;
+  ctx.shadowOffsetY = 0;
+
   ctx.strokeStyle = '#1a1a1a';
-  ctx.lineWidth = 2.5;
+  ctx.lineWidth = 4;
   roundedRect(ctx, boxX, boxY, boxW, boxH, cornerRadius);
   ctx.stroke();
+
+
 
   // ── QR code inside box
   const qrX = boxX + padding;
@@ -178,13 +190,13 @@ async function render() {
 
   // Subtitle
   if (subText) {
-    ctx.fillStyle = '#555555';
+    ctx.fillStyle = '#1a1a1a';
     ctx.font = `400 ${fontSize - 4}px -apple-system, BlinkMacSystemFont, sans-serif`;
     ctx.fillText(subText, W / 2, textY + nameH + 4);
   }
 
   // Label
-  ctx.fillStyle = '#888888';
+  ctx.fillStyle = '#1a1a1a';
   ctx.font = `400 ${fontSize - 6}px -apple-system, BlinkMacSystemFont, sans-serif`;
   ctx.fillText(label, W / 2, textY + nameH + (subText ? subH + 8 : 4));
 }
