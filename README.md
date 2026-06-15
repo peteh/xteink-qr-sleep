@@ -33,13 +33,14 @@ Get the Device
 
 ### Xteink X4
 
-* [Buy on AliExpress (affiliate)](https://s.click.aliexpress.com/e/_c3XEtWoZ>)
 * [Buy on Amazon (affiliate)](https://amzn.to/3QlR9fm)
+* [Buy on AliExpress (affiliate)](https://s.click.aliexpress.com/e/_c3XEtWoZ>)
+
 
 ### Xteink X3
 
-* [Buy on AliExpress (affiliate)](https://amzn.to/4xKYwhk)
-* [Buy on Amazon (affiliate)](https://s.click.aliexpress.com/e/_c3FFiS2H)
+* [Buy on Amazon (affiliate)](https://amzn.to/4xKYwhk)
+* [Buy on AliExpress (affiliate)](https://s.click.aliexpress.com/e/_c3FFiS2H)
 
 
 ## Hosting

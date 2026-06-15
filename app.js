@@ -258,7 +258,7 @@ function changeDevice(deviceId) {
   H = device.height;
   
   // Update UI
-  get('device-label').textContent = device.name;
+  //get('device-label').textContent = device.name;
   get('btn-text').textContent = `Download PNG (${W}×${H})`;
   get('preview-label').textContent = `${W}×${H}`;
   
@@ -282,7 +282,7 @@ get('f-device').addEventListener('change', (e) => {
 });
 
 get('btn-download').addEventListener('click', downloadPNG);
-get('btn-preview').addEventListener('click', render);
+//get('btn-preview').addEventListener('click', render);
 
 /* ── Initial render ───────────────────────────────────── */
 
