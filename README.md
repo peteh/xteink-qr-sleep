@@ -1,7 +1,7 @@
-# QR Sleep Screen Generator — Xteink X4
+# QR Sleep Screen Generator — Xteink X3/X4
 
-A self-hosted single-page tool that generates a vCard QR code as a 480×800 PNG
-optimised for the Xteink X4 with CrossInk firmware in **Page Overlay** mode.
+A self-hosted single-page tool that generates a vCard QR code as a PNG
+optimised for the Xteink X3 (600×800) and X4 (480×800) with CrossInk firmware in **Page Overlay** mode.
 
 ## How it works
 
@@ -13,9 +13,9 @@ of the screen. Result: the book text stays readable and the QR floats on top.
 ## Files
 
 ```
-index.html   — markup
+index.html   — markup (includes device selection menu)
 style.css    — styles
-app.js       — QR generation, canvas rendering, PNG download
+app.js       — QR generation, canvas rendering, PNG download, device management
 ```
 
 No build step. No backend. No dependencies beyond a CDN-hosted QRCode.js.

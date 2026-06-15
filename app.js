@@ -1,9 +1,15 @@
 'use strict';
 
-/* ── Constants ──────────────────────────────────────── */
+/* ── Device Configuration ──────────────────────────────── */
 
-const W = 480;
-const H = 800;
+const DEVICES = {
+  x4: { name: 'Xteink X4', width: 480, height: 800 },
+  x3: { name: 'Xteink X3', width: 528, height: 792 }
+};
+
+let currentDevice = 'x4';
+let W = DEVICES.x4.width;
+let H = DEVICES.x4.height;
 
 /* ── Book text simulation ───────────────────────────── */
 
@@ -229,6 +235,27 @@ function debouncedRender() {
 });
 
 /* ── Button wiring ────────────────────────────────────── */
+
+function changeDevice(deviceId) {
+  currentDevice = deviceId;
+  const device = DEVICES[deviceId];
+  W = device.width;
+  H = device.height;
+  
+  // Update UI
+  get('device-label').textContent = device.name;
+  get('btn-text').textContent = `Download PNG (${W}×${H})`;
+  get('preview-label').textContent = `${W}×${H}`;
+  const canvas = get('out-canvas');
+  canvas.width = W;
+  canvas.height = H;
+  
+  render();
+}
+
+get('f-device').addEventListener('change', (e) => {
+  changeDevice(e.target.value);
+});
 
 get('btn-download').addEventListener('click', downloadPNG);
 get('btn-preview').addEventListener('click', render);

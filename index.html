@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>QR Sleep Screen Generator — Xteink X4</title>
+  <title>QR Sleep Screen Generator — Xteink X3/X4</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -11,7 +11,18 @@
 
     <aside class="sidebar">
       <h1>QR Sleep Screen</h1>
-      <p class="subtitle">Xteink X4 · CrossInk Page Overlay</p>
+      <p class="subtitle"><span id="device-label">Xteink X4</span> · CrossInk Page Overlay</p>
+
+      <section>
+        <h2>Device</h2>
+        <div class="field-group">
+          <label for="f-device">Select device</label>
+          <select id="f-device">
+            <option value="x4">Xteink X4 (480×800)</option>
+            <option value="x3">Xteink X3 (528×792)</option>
+          </select>
+        </div>
+      </section>
 
       <section>
         <h2>Contact details</h2>
@@ -72,7 +83,7 @@
       <div class="actions">
         <button id="btn-download" class="primary">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          Download PNG (480×800)
+          <span id="btn-text">Download PNG (480×800)</span>
         </button>
         <button id="btn-preview">Refresh preview</button>
       </div>
@@ -80,7 +91,8 @@
       <div class="instructions">
         <h2>How to use</h2>
         <ol>
-          <li>Fill in your contact details above</li>
+          <li>Select your device above</li>
+          <li>Fill in your contact details</li>
           <li>Download the PNG file</li>
           <li>Copy it into <code>.sleep/</code> on your SD card</li>
           <li>In CrossInk: Settings → Display → Sleep Screen → <strong>Page overlay</strong></li>
@@ -95,7 +107,7 @@
           <div class="book-text-sim" aria-hidden="true" id="book-bg"></div>
           <canvas id="out-canvas" width="480" height="800" aria-label="Sleep screen preview"></canvas>
         </div>
-        <p class="frame-label">Preview at 50% · 480×800 actual output</p>
+        <p class="frame-label">Preview at 50% · <span id="preview-label">480×800</span> actual output</p>
       </div>
     </main>
 
