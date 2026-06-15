@@ -13,7 +13,9 @@ let H = DEVICES.x4.height;
 
 /* ── Book text simulation ───────────────────────────── */
 
-const BOOK_SAMPLE = `The morning light filtered through the curtains in long golden bands, falling across the worn wooden floor in patterns that shifted imperceptibly as the earth turned. She had been awake for an hour already, lying still, watching the light change.\n\nThere is a particular quality to early morning silence — not the absence of sound, but its suspension, as if the world is holding its breath before the day begins properly. Birds, distant traffic, the house settling: all of it muffled and held apart.\n\nShe reached for the book on the nightstand. The spine was cracked from years of re-reading, the pages soft at the corners. She found her place by habit rather than by the folded corner she had never learned to use.`;
+const BOOK_SAMPLE = `The sky above the port was the color of television, tuned to a dead channel. "It's not like I'm using," Case heard someone say, as he shouldered his way through the crowd around the door of the Chat. "It's like my body's developed this massive drug deficiency." It was a Sprawl voice and a Sprawl joke. The Chatsubo was a bar for professional expatriates; you could drink there for a week and never hear two words in Japanese. 
+Ratz was tending bar, his prosthetic arm jerking monotonously as he filled a tray of glasses with synthetic sake. The bartender's smile was the color of a first-class contractor's fender, just before the whole works goes ceramic. He had a face like a closed fist.
+Case had been a cowboy, a rustler, one of a certain breed of quick-handed thieves for hire. He'd operated on an almost permanent adrenaline high, a byproduct of youth and proficiency and proficiency's concomitant. He'd operated out of a suitcase, chasing high-paying jobs like a satellite dish tracking a distant signal, until someone had managed to damage his nervous system with a wartime Russian mycotoxin.`;
 
 document.getElementById('book-bg').textContent = BOOK_SAMPLE;
 
@@ -29,17 +31,19 @@ function buildVCard() {
   const title = get('f-title').value.trim();
   const url   = get('f-url').value.trim();
 
-  const parts = name.split(' ');
-  const first = parts[0] || '';
-  const last  = parts.slice(1).join(' ');
+  // Parse name: assume last space-separated word is last name
+  const parts = name.trim().split(/\s+/);
+  const last = parts.length > 1 ? parts[parts.length - 1] : '';
+  const first = parts.length > 1 ? parts.slice(0, -1).join(' ') : parts[0];
 
-  let v = 'BEGIN:VCARD\r\nVERSION:3.0\r\n';
-  v += `N:${last};${first};;;\r\n`;
+  let v = 'BEGIN:VCARD\r\n';
+  v += 'VERSION:3.0\r\n';
   v += `FN:${name || 'Unknown'}\r\n`;
+  v += `N:${last};${first}\r\n`;
   if (org)   v += `ORG:${org}\r\n`;
   if (title) v += `TITLE:${title}\r\n`;
   if (phone) v += `TEL;TYPE=CELL:${phone}\r\n`;
-  if (email) v += `EMAIL:${email}\r\n`;
+  if (email) v += `EMAIL;TYPE=INTERNET:${email}\r\n`;
   if (url)   v += `URL:${url}\r\n`;
   v += 'END:VCARD';
   return v;

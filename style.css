@@ -266,7 +266,7 @@ button.primary:hover { opacity: 0.85; background: var(--accent); }
   background: #f8f6f0;
   padding: 20px 16px;
   font-family: Georgia, "Times New Roman", serif;
-  font-size: 7.5px;
+  font-size: 10px;
   line-height: 1.7;
   color: #2a2a2a;
   overflow: hidden;
